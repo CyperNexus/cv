@@ -49,7 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const particles = [];
-        const particleCount = Math.min(Math.floor(window.innerWidth / 14), 75);
+        const particleCount = Math.min(Math.floor(window.innerWidth / 15), 70);
+
+        // 100% High-Luminance Electric Neon Palette
+        const electricNeonColors = ['#00ffff', '#ff007f', '#00ff66', '#ffffff', '#ff00ff', '#33ffff'];
 
         class Particle {
             constructor() {
@@ -57,10 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.y = Math.random() * height;
                 this.vx = (Math.random() - 0.5) * 1.2;
                 this.vy = (Math.random() - 0.5) * 1.2;
-                this.radius = Math.random() * 3.2 + 2.8; // Bold, sharp glowing nodes
-                const neonColors = ['#00f3ff', '#ff2a85', '#00ff88', '#ffbd2e', '#c084fc', '#ffffff'];
-                this.color = neonColors[Math.floor(Math.random() * neonColors.length)];
-                this.alpha = 1.0; // 100% Opaque vibrancy
+                this.radius = Math.random() * 2.2 + 2.0; // Sleek glowing nodes
+                this.color = electricNeonColors[Math.floor(Math.random() * electricNeonColors.length)];
             }
 
             update() {
@@ -73,11 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             draw() {
                 ctx.save();
+                ctx.globalCompositeOperation = 'lighter'; // Electric blending mode
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 ctx.globalAlpha = 1.0;
-                ctx.shadowBlur = 20;
+                ctx.shadowBlur = 22;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
@@ -102,15 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 particles[i].update();
                 particles[i].draw();
 
-                // Connect nearby particles with thick, bright neon gradient lines
+                // Connect nearby particles with ultra-bright neon gradient laser lines
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < 170) {
-                        const alpha = 0.85 * (1 - dist / 170); // High-contrast, crystal clear connections
+                    if (dist < 165) {
+                        const alpha = 0.9 * (1 - dist / 165); // High-contrast, crystal clear laser lines
                         ctx.save();
+                        ctx.globalCompositeOperation = 'lighter'; // Intense light blending
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -121,28 +124,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         ctx.strokeStyle = grad;
                         ctx.globalAlpha = alpha;
-                        ctx.lineWidth = 2.2;
-                        ctx.shadowBlur = 14;
+                        ctx.lineWidth = 1.2;
+                        ctx.shadowBlur = 16;
                         ctx.shadowColor = particles[i].color;
                         ctx.stroke();
                         ctx.restore();
                     }
                 }
 
-                // Connect to mouse cursor with intense laser beam
+                // Connect to mouse cursor with intense electric laser beam
                 const mdx = particles[i].x - mouseX;
                 const mdy = particles[i].y - mouseY;
                 const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-                if (mdist < 190) {
-                    const mAlpha = 0.9 * (1 - mdist / 190);
+                if (mdist < 185) {
+                    const mAlpha = 1.0 * (1 - mdist / 185);
                     ctx.save();
+                    ctx.globalCompositeOperation = 'lighter';
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(mouseX, mouseY);
                     ctx.strokeStyle = particles[i].color;
                     ctx.globalAlpha = mAlpha;
-                    ctx.lineWidth = 2.5;
-                    ctx.shadowBlur = 18;
+                    ctx.lineWidth = 1.5;
+                    ctx.shadowBlur = 24;
                     ctx.shadowColor = particles[i].color;
                     ctx.stroke();
                     ctx.restore();
