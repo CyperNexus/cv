@@ -81,19 +81,12 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
 }
 
 .bg-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(circle at 50% 30%, rgba(12, 12, 24, 0.2) 0%, rgba(5, 5, 12, 0.38) 100%);
-    z-index: -2;
-    pointer-events: none;
+    display: none !important;
 }
 
 /* Typography Headings */
