@@ -49,18 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const particles = [];
-        const particleCount = Math.min(Math.floor(window.innerWidth / 16), 65);
+        const particleCount = Math.min(Math.floor(window.innerWidth / 14), 75);
 
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 1.1;
-                this.vy = (Math.random() - 0.5) * 1.1;
-                this.radius = Math.random() * 2.8 + 2.0; // Larger glowing orbs
-                const neonColors = ['#00f3ff', '#ff2a85', '#c084fc', '#00ff88', '#e9d5ff'];
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.radius = Math.random() * 3.2 + 2.8; // Bold, sharp glowing nodes
+                const neonColors = ['#00f3ff', '#ff2a85', '#00ff88', '#ffbd2e', '#c084fc', '#ffffff'];
                 this.color = neonColors[Math.floor(Math.random() * neonColors.length)];
-                this.alpha = Math.random() * 0.4 + 0.6; // High vibrancy
+                this.alpha = 1.0; // 100% Opaque vibrancy
             }
 
             update() {
@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha;
-                ctx.shadowBlur = 16;
+                ctx.globalAlpha = 1.0;
+                ctx.shadowBlur = 20;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
@@ -102,48 +102,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 particles[i].update();
                 particles[i].draw();
 
-                // Connect nearby particles with bright neon lines
+                // Connect nearby particles with thick, bright neon gradient lines
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < 150) {
-                        const alpha = 0.5 * (1 - dist / 150);
+                    if (dist < 170) {
+                        const alpha = 0.85 * (1 - dist / 170); // High-contrast, crystal clear connections
                         ctx.save();
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         
-                        // Create gradient stroke between particles
                         const grad = ctx.createLinearGradient(particles[i].x, particles[i].y, particles[j].x, particles[j].y);
                         grad.addColorStop(0, particles[i].color);
                         grad.addColorStop(1, particles[j].color);
                         
                         ctx.strokeStyle = grad;
                         ctx.globalAlpha = alpha;
-                        ctx.lineWidth = 1.4;
-                        ctx.shadowBlur = 8;
+                        ctx.lineWidth = 2.2;
+                        ctx.shadowBlur = 14;
                         ctx.shadowColor = particles[i].color;
                         ctx.stroke();
                         ctx.restore();
                     }
                 }
 
-                // Connect to mouse cursor with intense laser line
+                // Connect to mouse cursor with intense laser beam
                 const mdx = particles[i].x - mouseX;
                 const mdy = particles[i].y - mouseY;
                 const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-                if (mdist < 170) {
-                    const mAlpha = 0.75 * (1 - mdist / 170);
+                if (mdist < 190) {
+                    const mAlpha = 0.9 * (1 - mdist / 190);
                     ctx.save();
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(mouseX, mouseY);
                     ctx.strokeStyle = particles[i].color;
                     ctx.globalAlpha = mAlpha;
-                    ctx.lineWidth = 1.8;
-                    ctx.shadowBlur = 12;
+                    ctx.lineWidth = 2.5;
+                    ctx.shadowBlur = 18;
                     ctx.shadowColor = particles[i].color;
                     ctx.stroke();
                     ctx.restore();
