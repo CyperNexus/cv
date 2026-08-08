@@ -1,105 +1,372 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="neon">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV - CyperNexus</title>
+    <title>CyperNexus — Cybernetic Portfolio & Systems Engineer</title>
     <link rel="icon" type="image/png" href="icon.png">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Interactive Background Particle Canvas -->
+    <canvas id="bg-canvas"></canvas>
     <div class="bg-overlay"></div>
+
+    <!-- Main Container -->
     <div class="container">
-        <header>
+        
+        <!-- Header & Hero Section -->
+        <header class="hero-header glass-card">
+            <div class="header-top-bar">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">OPEN TO COLLAB</span>
+                </div>
+                
+                <!-- Theme Switcher -->
+                <div class="theme-switcher-group">
+                    <button class="theme-btn active" data-set-theme="neon" title="Neon Cyberpunk">
+                        <i class="fas fa-bolt"></i>
+                    </button>
+                    <button class="theme-btn" data-set-theme="emerald" title="Emerald Matrix">
+                        <i class="fas fa-terminal"></i>
+                    </button>
+                    <button class="theme-btn" data-set-theme="synthwave" title="Deep Violet Synthwave">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+
             <div class="profile-pic">
                 <div class="neon-ring"></div>
-                <img src="icon.png" alt="CyperNexus" id="avatar">
+                <img src="icon.png" alt="CyperNexus Avatar" id="avatar">
             </div>
-            <h1 class="neon-text">CyperNexus</h1>
-            <p class="subtitle">Software Engineer & Cybernetic Enthusiast</p>
-            <div class="tag-group">
-                <span class="badge neon-badge">18+</span>
-                <span class="badge neon-badge"><i class="fas fa-map-marker-alt"></i> Hà Nội</span>
+                       <div class="line-art-container">
+                <svg id="sparkle-title" class="line-art-title-svg" viewBox="0 0 700 100" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="line-art-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="50%" stop-color="#e9d5ff" />
+                            <stop offset="100%" stop-color="#c084fc" />
+                        </linearGradient>
+                        
+                        <!-- Mask for Guaranteed Cross-Browser Line Art Stroke Drawing -->
+                        <mask id="line-art-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="700" height="100">
+                            <line x1="0" y1="50" x2="700" y2="50" class="mask-stroke-line" />
+                        </mask>
+
+                        <filter id="line-glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <text x="50%" y="68%" text-anchor="middle" class="perfect-line-art-text" mask="url(#line-art-mask)" filter="url(#line-glow)">CyperNexus</text>
+                </svg>
             </div>
             
+            <div class="typing-container">
+                <span class="subtitle-prefix">&gt; </span>
+                <span id="typed-text" class="typed-text sparkle-subtitle"></span><span class="cursor-blink">|</span>
+            </div>
+
+            <div class="tag-group">
+                <span class="badge neon-badge"><i class="fas fa-user-shield"></i> 18+</span>
+                <span class="badge neon-badge"><i class="fas fa-map-marker-alt"></i> Hà Nội, Việt Nam</span>
+                <span class="badge neon-badge"><i class="fas fa-microchip"></i> AI & Systems</span>
+            </div>
+            
+            <!-- Upgraded Cyber Music Player Widget -->
             <div class="music-player-widget glass-card-mini">
-                <div class="vinyl-container vinyl-record" id="record">
-                    <img src="icon.png" class="vinyl-label" alt="vinyl">
-                    <div class="record-hole"></div>
-                </div>
-                <div class="player-ui">
-                    <button id="music-btn" class="ctrl-btn"><i class="fas fa-play"></i></button>
-                    <div class="progress-container">
-                        <span class="time-display" id="current-time">0:00</span>
-                        <input type="range" id="progress-bar" value="0" min="0" max="100" step="0.1">
-                        <span class="time-display" id="total-time">0:00</span>
+                <div class="vinyl-wrapper">
+                    <canvas id="audio-visualizer-canvas" width="110" height="110"></canvas>
+                    <div class="vinyl-container vinyl-record" id="record">
+                        <img src="icon.png" class="vinyl-label" alt="vinyl label">
+                        <div class="record-hole"></div>
                     </div>
                 </div>
-                <audio id="bg-music" loop>
+                
+                <div class="player-ui">
+                    <div class="player-top">
+                        <span class="song-title"><i class="fas fa-music"></i> Jane — Background Cyber Beats</span>
+                        <div class="volume-control">
+                            <button id="mute-btn" class="mini-btn"><i class="fas fa-volume-up"></i></button>
+                            <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
+                        </div>
+                    </div>
+                    
+                    <div class="player-controls">
+                        <button id="music-btn" class="ctrl-btn" aria-label="Play/Pause Music">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="progress-container">
+                            <span class="time-display" id="current-time">0:00</span>
+                            <input type="range" id="progress-bar" value="0" min="0" max="100" step="0.1">
+                            <span class="time-display" id="total-time">0:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <audio id="bg-music" loop crossorigin="anonymous">
                     <source src="jane.mp3" type="audio/mpeg">
                 </audio>
             </div>
         </header>
 
+        <!-- About Me Section -->
         <section class="about glass-card">
-            <h2><i class="fas fa-user-astronaut"></i> Về bản thân</h2>
-            <p>Tôi là <strong>CyperNexus</strong>. Đam mê lập trình và luôn khao khát tạo ra những sản phẩm mang tính đột phá. Luôn học hỏi, nghiên cứu những công nghệ mới nhất để mang lại giá trị thực tiễn và tính thẩm mỹ cao trong từng dòng code.</p>
+            <h2><i class="fas fa-user-astronaut"></i> Về Bản Thân</h2>
+            <p class="about-bio">
+                Tôi là <strong>CyperNexus</strong> (Dat Nguyxn) — Software Engineer đam mê lập trình hệ thống, AI Agents và công nghệ Cybernetic. 
+                Luôn khao khát tạo ra những sản phẩm mang tính đột phá, tối ưu hóa hiệu năng và mang lại tính thẩm mỹ cao trong từng dòng code.
+            </p>
+            
+            <!-- Dynamic Stats Matrix -->
+            <div class="stats-matrix">
+                <div class="stat-box">
+                    <span class="stat-number" data-target="7">0</span>
+                    <span class="stat-label">Sản Phẩm Đổi Mới</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" data-target="5">0</span>
+                    <span class="stat-label">Ngôn Ngữ Chuyên Sâu</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" data-target="99.9">0</span><span class="stat-unit">%</span>
+                    <span class="stat-label">Hiệu Suất Tối Ưu</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" data-target="24">0</span><span class="stat-unit">/7</span>
+                    <span class="stat-label">Học Hỏi Đam Mê</span>
+                </div>
+            </div>
         </section>
 
+        <!-- Skills & Tech Matrix -->
         <section class="skills glass-card">
-            <h2><i class="fas fa-code"></i> Kỹ năng chuyên môn</h2>
-            <div class="skill-tags">
-                <span class="skill-tag"><i class="fab fa-java"></i> Java</span>
-                <span class="skill-tag"><i class="fab fa-js"></i> JavaScript</span>
-                <span class="skill-tag"><i class="fab fa-python"></i> Python</span>
-                <span class="skill-tag"><i class="fas fa-c"></i> C++</span>
-                <span class="skill-tag"><i class="fab fa-rust"></i> Rust</span>
+            <h2><i class="fas fa-code-branch"></i> Kỹ Năng &amp; Công Nghệ</h2>
+            
+            <div class="skills-category">
+                <h3 class="category-title"><i class="fas fa-laptop-code"></i> Ngôn Ngữ Nòng Cốt</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag" data-level="90%"><i class="fab fa-java"></i> Java</span>
+                    <span class="skill-tag" data-level="95%"><i class="fab fa-js"></i> JavaScript / TS</span>
+                    <span class="skill-tag" data-level="90%"><i class="fab fa-python"></i> Python</span>
+                    <span class="skill-tag" data-level="85%"><i class="fas fa-c"></i> C++</span>
+                    <span class="skill-tag" data-level="80%"><i class="fab fa-rust"></i> Rust</span>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h3 class="category-title"><i class="fas fa-brain"></i> AI &amp; Hệ Thống</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag"><i class="fas fa-robot"></i> AI Agents Framework</span>
+                    <span class="skill-tag"><i class="fas fa-project-diagram"></i> LLM Prompt Engineering</span>
+                    <span class="skill-tag"><i class="fas fa-database"></i> Distributed Database</span>
+                    <span class="skill-tag"><i class="fab fa-docker"></i> Docker / Automation</span>
+                    <span class="skill-tag"><i class="fab fa-git-alt"></i> Git &amp; CI/CD</span>
+                </div>
             </div>
         </section>
 
+        <!-- Interactive Projects Showcase -->
         <section class="projects glass-card">
-            <h2><i class="fas fa-project-diagram"></i> Sản phẩm nổi bật</h2>
+            <div class="projects-header">
+                <h2><i class="fas fa-cubes"></i> Sản Phẩm Nổi Bật</h2>
+                
+                <!-- Category Filters -->
+                <div class="project-filters">
+                    <button class="filter-btn active" data-filter="all">Tất Cả</button>
+                    <button class="filter-btn" data-filter="ai">AI &amp; LLMs</button>
+                    <button class="filter-btn" data-filter="automation">Tự Động Hóa</button>
+                    <button class="filter-btn" data-filter="systems">Hệ Thống &amp; DB</button>
+                </div>
+            </div>
+
             <div class="project-grid">
-                <div class="project-card">
-                    <h3>FlowAgent</h3>
-                    <p>Agent được đào tạo độc lập, làm đúng việc, hiệu xuất cao, phù hợp tinh chỉnh cá nhân.</p>
+                <!-- Project 1 -->
+                <div class="project-card" data-category="ai" data-tilt>
+                    <div class="project-banner">
+                        <img src="flowagent.jpg" alt="FlowAgent Banner" loading="lazy">
+                        <span class="project-badge ai">AI Agent</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>FlowAgent</h3>
+                        <p>Agent được đào tạo độc lập, làm đúng việc, hiệu suất cao, phù hợp tinh chỉnh cá nhân theo nhu cầu doanh nghiệp.</p>
+                        <div class="project-tech-stack">
+                            <span>Python</span>
+                            <span>LLM</span>
+                            <span>Agentic</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <h3>VideoUpper</h3>
-                    <p>Công cụ quản lý, tối ưu và upload video đa nền tảng một cách tự động.</p>
+
+                <!-- Project 2 -->
+                <div class="project-card" data-category="automation" data-tilt>
+                    <div class="project-banner">
+                        <img src="videoupper.jpg" alt="VideoUpper Banner" loading="lazy">
+                        <span class="project-badge automation">Automation</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>VideoUpper</h3>
+                        <p>Công cụ quản lý, tối ưu và upload video đa nền tảng một cách tự động, tiết kiệm 90% thời gian tác vụ.</p>
+                        <div class="project-tech-stack">
+                            <span>JavaScript</span>
+                            <span>Automation</span>
+                            <span>API</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <h3>VideoGenerate</h3>
-                    <p>Hệ thống tự động tạo dựng video chất lượng cao dựa trên AI và kịch bản.</p>
+
+                <!-- Project 3 -->
+                <div class="project-card" data-category="ai" data-tilt>
+                    <div class="project-banner">
+                        <img src="videogenerate.jpg" alt="VideoGenerate Banner" loading="lazy">
+                        <span class="project-badge ai">AI Video</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>VideoGenerate</h3>
+                        <p>Hệ thống tự động tạo dựng video chất lượng cao dựa trên AI, hình ảnh synth và kịch bản thông minh.</p>
+                        <div class="project-tech-stack">
+                            <span>Python</span>
+                            <span>AI Pipeline</span>
+                            <span>Media</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <h3>DatabaseController</h3>
-                    <p>Giải pháp quản lý, điều phối cơ sở dữ liệu phân tán an toàn và hiệu quả.</p>
+
+                <!-- Project 4 -->
+                <div class="project-card" data-category="systems" data-tilt>
+                    <div class="project-banner">
+                        <img src="databasecontroller.jpg" alt="DatabaseController Banner" loading="lazy">
+                        <span class="project-badge systems">Systems</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>DatabaseController</h3>
+                        <p>Giải pháp quản lý, điều phối cơ sở dữ liệu phân tán an toàn, tốc độ xử lý nhanh và độ ổn định cao.</p>
+                        <div class="project-tech-stack">
+                            <span>Java</span>
+                            <span>Rust</span>
+                            <span>Distributed</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <h3>PromtInjector</h3>
-                    <p>Công cụ phân tích, kiểm thử và tối ưu hóa prompt chuyên sâu cho LLMs.</p>
+
+                <!-- Project 5 -->
+                <div class="project-card" data-category="ai" data-tilt>
+                    <div class="project-banner">
+                        <img src="promptinjector.jpg" alt="PromtInjector Banner" loading="lazy">
+                        <span class="project-badge ai">LLM Tools</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>PromtInjector</h3>
+                        <p>Công cụ phân tích, kiểm thử và tối ưu hóa prompt chuyên sâu cho LLMs, phát hiện lỗ hổng prompt injection.</p>
+                        <div class="project-tech-stack">
+                            <span>TypeScript</span>
+                            <span>LLM Testing</span>
+                            <span>Security</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 (Featured Addition) -->
+                <div class="project-card" data-category="systems" data-tilt>
+                    <div class="project-banner">
+                        <img src="neuralcompiler.jpg" alt="NeuralCompiler Banner" loading="lazy">
+                        <span class="project-badge systems">Compiler</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>NeuralCompiler</h3>
+                        <p>Trình biên dịch tối ưu hóa mô hình AI đa nền tảng, tăng tốc xử lý inference trên thiết bị phần cứng cá nhân.</p>
+                        <div class="project-tech-stack">
+                            <span>C++</span>
+                            <span>Rust</span>
+                            <span>Optimization</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Cyber Terminal Mini Widget -->
+        <section class="terminal-section glass-card">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div class="terminal-title"><i class="fas fa-terminal"></i> CyperNexus Shell — Interactive CLI (Gõ `/help`)</div>
+            </div>
+            <div class="terminal-body" id="terminal-output">
+                <div class="terminal-line system-line">Chào mừng đến với CyperNexus Cyber Terminal v2.5.0!</div>
+                <div class="terminal-line system-line">Gõ <span class="cmd-highlight">/help</span> để xem danh sách các câu lệnh có sẵn.</div>
+            </div>
+            <div class="terminal-input-row">
+                <span class="prompt-symbol">cyper@nexus:~$</span>
+                <input type="text" id="terminal-input" placeholder="Gõ lệnh tại đây (vd: /help, /skills, /projects, /whoami)..." autocomplete="off">
+            </div>
+        </section>
+
+        <!-- Contact Section -->
         <section class="contact glass-card">
-            <h2><i class="fas fa-link"></i> Liên hệ</h2>
-            <div class="contact-links">
-                <a href="https://discord.com/users/._almighty" target="_blank" class="neon-link discord">
-                    <i class="fab fa-discord"></i> ._almighty
-                </a>
-                <a href="mailto:cypernguyen@gmail.com" class="neon-link email">
-                    <i class="fas fa-envelope"></i> cypernguyen@gmail.com
-                </a>
-                <a href="https://www.facebook.com/profile.php?id=61554702887438" target="_blank" class="neon-link facebook">
-                    <i class="fab fa-facebook-f"></i> Dat Nguyxn
+            <h2><i class="fas fa-paper-plane"></i> Kết Nối Với Tôi</h2>
+            
+            <div class="contact-grid">
+                <div class="contact-card discord">
+                    <div class="contact-icon"><i class="fab fa-discord"></i></div>
+                    <div class="contact-info">
+                        <span class="contact-label">Discord</span>
+                        <span class="contact-value">._almighty</span>
+                    </div>
+                    <button class="copy-btn" data-copy="._almighty" title="Sao chép Username Discord">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+
+                <div class="contact-card email">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-info">
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value">cypernguyen@gmail.com</span>
+                    </div>
+                    <button class="copy-btn" data-copy="cypernguyen@gmail.com" title="Sao chép Email">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+
+                <a href="https://www.facebook.com/profile.php?id=61554702887438" target="_blank" rel="noopener noreferrer" class="contact-card facebook">
+                    <div class="contact-icon"><i class="fab fa-facebook-f"></i></div>
+                    <div class="contact-info">
+                        <span class="contact-label">Facebook</span>
+                        <span class="contact-value">Dat Nguyxn</span>
+                    </div>
+                    <div class="external-icon"><i class="fas fa-external-link-alt"></i></div>
                 </a>
             </div>
         </section>
+
+        <!-- Footer -->
+        <footer class="footer-text">
+            <p>&copy; 2026 <strong>CyperNexus</strong>. Crafted with <i class="fas fa-heart neon-heart"></i> &amp; Cybernetic Vision.</p>
+        </footer>
+
     </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
 
     <script src="script.js"></script>
 </body>
