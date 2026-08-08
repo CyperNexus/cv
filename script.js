@@ -458,61 +458,106 @@ document.addEventListener('DOMContentLoaded', () => {
         line.className = `terminal-line ${className}`;
         line.textContent = text;
         terminalOutput.appendChild(line);
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+
+    function streamTerminalResponse(lines, className = 'response-line', speed = 12) {
+        if (!Array.isArray(lines)) lines = [lines];
+        
+        let lineIdx = 0;
+
+        function streamNextLine() {
+            if (lineIdx >= lines.length) return;
+
+            const fullText = lines[lineIdx];
+            const lineEl = document.createElement('div');
+            lineEl.className = `terminal-line ${className}`;
+            terminalOutput.appendChild(lineEl);
+
+            let charIdx = 0;
+            function streamChar() {
+                if (charIdx < fullText.length) {
+                    lineEl.textContent += fullText.charAt(charIdx);
+                    charIdx++;
+                    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                    setTimeout(streamChar, speed);
+                } else {
+                    lineIdx++;
+                    setTimeout(streamNextLine, 40);
+                }
+            }
+            streamChar();
+        }
+
+        streamNextLine();
     }
 
     function processCommand(cmd) {
         switch (cmd) {
             case '/help':
-                appendTerminalLine('Các câu lệnh khả dụng:');
-                appendTerminalLine('  /whoami     - Xem thông tin lập trình viên');
-                appendTerminalLine('  /skills     - Danh sách kỹ năng nòng cốt');
-                appendTerminalLine('  /projects   - Danh sách dự án nổi bật');
-                appendTerminalLine('  /contact    - Thông tin liên hệ trực tiếp');
-                appendTerminalLine('  /theme      - Thay đổi theme (vd: /theme emerald, /theme synthwave, /theme neon)');
-                appendTerminalLine('  /clear      - Xóa lịch sử màn hình terminal');
+                streamTerminalResponse([
+                    'Các câu lệnh khả dụng:',
+                    '  /whoami     - Xem thông tin chi tiết lập trình viên',
+                    '  /skills     - Danh sách kỹ năng nòng cốt & công nghệ',
+                    '  /projects   - Danh sách dự án nổi bật',
+                    '  /contact    - Thông tin liên hệ trực tiếp',
+                    '  /theme      - Thay đổi giao diện (/theme neon | emerald | synthwave)',
+                    '  /clear      - Xóa sạch màn hình terminal'
+                ]);
                 break;
             case '/whoami':
-                appendTerminalLine('CyperNexus (Dat Nguyxn) — Software Engineer & Cybernetic Enthusiast.');
-                appendTerminalLine('Tập trung phát triển AI Agents, C++/Rust Systems và Tự động hóa.');
+                streamTerminalResponse([
+                    '🤖 CyperNexus (Dat Nguyxn) — Software Engineer & Cybernetic Enthusiast.',
+                    '💻 Định hướng: Phát triển hệ thống AI Agents, Distributed DB và C++/Rust Optimization.',
+                    '📍 Vị trí: Hà Nội, Việt Nam | Đam mê công nghệ tiên tiến & Kiến trúc phần mềm.'
+                ]);
                 break;
             case '/skills':
-                appendTerminalLine('Ngôn ngữ: Java, JavaScript/TS, Python, C++, Rust.');
-                appendTerminalLine('Chuyên môn: AI Agents Framework, LLM Prompting, Distributed DB, Docker.');
+                streamTerminalResponse([
+                    '⚡ Ngôn ngữ lập trình: Java, JavaScript/TypeScript, Python, C++, Rust.',
+                    '🧠 AI & Data: Multi-Agent Frameworks, LLM Fine-tuning & Prompting, PyTorch.',
+                    '🛠️ Systems & DevOps: Distributed Database, Docker, CI/CD, Git, High-Performance APIs.'
+                ]);
                 break;
             case '/projects':
-                appendTerminalLine('1. FlowAgent — Autonomous AI Agentic System');
-                appendTerminalLine('2. VideoUpper — Automated Multi-Platform Video Management');
-                appendTerminalLine('3. VideoGenerate — AI Powered High Quality Video Pipeline');
-                appendTerminalLine('4. DatabaseController — Distributed Database Coordinator');
-                appendTerminalLine('5. PromtInjector — LLM Prompt Testing & Diagnostics');
-                appendTerminalLine('6. NeuralCompiler — Neural Inference Optimization Engine');
+                streamTerminalResponse([
+                    '📦 1. FlowAgent — Autonomous AI Agentic System (Python / LLM)',
+                    '🎬 2. VideoUpper — Automated Multi-Platform Video Management (JS / Automation)',
+                    '🎥 3. VideoGenerate — AI Powered High Quality Video Pipeline (Python / Media)',
+                    '🗄️ 4. DatabaseController — Distributed Database Coordinator (Java / Rust)',
+                    '🛡️ 5. PromtInjector — LLM Prompt Security Diagnostics (TypeScript / LLM)',
+                    '⚡ 6. NeuralCompiler — Neural Inference Optimization Engine (C++ / Rust)'
+                ]);
                 break;
             case '/contact':
-                appendTerminalLine('Discord: ._almighty');
-                appendTerminalLine('Email: cypernguyen@gmail.com');
-                appendTerminalLine('Facebook: Dat Nguyxn');
+                streamTerminalResponse([
+                    '📬 Thông tin liên hệ:',
+                    '  • Discord: ._almighty',
+                    '  • Email: cypernguyen@gmail.com',
+                    '  • Facebook: Dat Nguyxn'
+                ]);
                 break;
             case '/clear':
                 terminalOutput.innerHTML = '';
-                appendTerminalLine('Đã xóa màn hình terminal.', 'system-line');
+                streamTerminalResponse('✨ Đã xóa sạch màn hình terminal.', 'system-line');
                 break;
             case '/theme neon':
                 setTheme('neon');
-                appendTerminalLine('Đã đổi theme sang Neon Cyberpunk ⚡', 'system-line');
+                streamTerminalResponse('⚡ Đã đổi giao diện sang Neon Cyberpunk.', 'system-line');
                 break;
             case '/theme emerald':
                 setTheme('emerald');
-                appendTerminalLine('Đã đổi theme sang Emerald Matrix 🟢', 'system-line');
+                streamTerminalResponse('🟢 Đã đổi giao diện sang Emerald Matrix.', 'system-line');
                 break;
             case '/theme synthwave':
                 setTheme('synthwave');
-                appendTerminalLine('Đã đổi theme sang Deep Violet Synthwave 🌆', 'system-line');
+                streamTerminalResponse('🌆 Đã đổi giao diện sang Deep Violet Synthwave.', 'system-line');
                 break;
             default:
                 if (cmd.startsWith('/theme')) {
-                    appendTerminalLine('Cú pháp: /theme <neon | emerald | synthwave>');
+                    streamTerminalResponse('⚠️ Cú pháp: /theme <neon | emerald | synthwave>');
                 } else {
-                    appendTerminalLine(`Lệnh không hợp lệ: "${cmd}". Gõ /help để xem trợ giúp.`);
+                    streamTerminalResponse(`⚠️ Lệnh không hợp lệ: "${cmd}". Gõ /help để xem danh sách lệnh.`);
                 }
                 break;
         }

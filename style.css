@@ -930,6 +930,7 @@ h2 i {
 .terminal-input-row {
     display: flex;
     align-items: center;
+    gap: 12px;
     background: rgba(10, 10, 20, 0.95);
     padding: 0.8rem 1.2rem;
     border-top: 1px solid var(--glass-border);
@@ -939,12 +940,14 @@ h2 i {
     font-family: 'Fira Code', monospace;
     font-size: 0.9rem;
     color: #00ff88;
-    margin-right: 10px;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 #terminal-input {
+    flex: 1;
     width: 100%;
+    min-width: 0;
     background: transparent !important;
     border: none !important;
     outline: none !important;
@@ -952,6 +955,8 @@ h2 i {
     font-family: 'Fira Code', monospace !important;
     font-size: 0.9rem !important;
     color: var(--neon-secondary) !important;
+    padding: 0;
+    margin: 0;
 }
 
 /* ==========================================================================
