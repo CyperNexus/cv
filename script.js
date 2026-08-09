@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '🎥 3. VideoGenerate — AI Powered High Quality Video Pipeline (Python / Media)',
                     '🗄️ 4. DatabaseController — Distributed Database Coordinator (Java / Rust)',
                     '🛡️ 5. PromtInjector — LLM Prompt Security Diagnostics (TypeScript / LLM)',
-                    '⚡ 6. NeuralCompiler — Neural Inference Optimization Engine (C++ / Rust)'
+                    '👾 6. OuterversePanel — Discord Selfbot & Activity Control System (TypeScript / Automation)'
                 ]);
                 break;
             case '/contact':
