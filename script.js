@@ -546,11 +546,10 @@ document.addEventListener('DOMContentLoaded', () => {
             case '/projects':
                 streamTerminalResponse([
                     '📦 1. FlowAgent — Autonomous AI Agentic System (Python / LLM)',
-                    '🎬 2. VideoUpper — Automated Multi-Platform Video Management (JS / Automation)',
-                    '🎥 3. VideoGenerate — AI Powered High Quality Video Pipeline (Python / Media)',
-                    '🗄️ 4. DatabaseController — Distributed Database Coordinator (Java / Rust)',
-                    '🛡️ 5. PromtInjector — LLM Prompt Security Diagnostics (TypeScript / LLM)',
-                    '👾 6. OuterversePanel — Discord Selfbot & Activity Control System (TypeScript / Automation)'
+                    '🎥 2. VideoGenerate — AI Powered Video Generation & Auto Upload Pipeline (Python / Automation)',
+                    '🗄️ 3. DatabaseController — Distributed Database Coordinator (Java / Rust)',
+                    '🛡️ 4. PromtInjector — LLM Prompt Security Diagnostics (TypeScript / LLM)',
+                    '👾 5. OuterversePanel — Discord Selfbot & Activity Control System (TypeScript / Automation)'
                 ]);
                 break;
             case '/contact':
